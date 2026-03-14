@@ -33,8 +33,8 @@ def main():
 
     # show_degree_statistics(G)
     # node_categories(G)
-    network_diameter_print(G)
-
+    # network_diameter_print(G)
+    # analyze_centralities(G)
 
 
 if __name__ == "__main__":

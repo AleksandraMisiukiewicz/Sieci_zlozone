@@ -155,3 +155,47 @@ def network_diameter_print(G):
     print("\nNetwork diameter:", diameter)
 
     print("Average path length:", average_path_length(G))
+
+# Centralność węzłów i krawędzi (rozkłady)
+# Metryki:
+# degree centrality
+# betweenness centrality
+# closeness centrality
+# PageRank
+# edge betweenness
+
+def analyze_centralities(G):
+
+    degree_centrality = nx.degree_centrality(G)
+
+    betweenness_centrality = nx.betweenness_centrality(G)
+
+    closeness_centrality = nx.closeness_centrality(G)
+
+    pagerank = nx.pagerank(G)
+
+    edge_betweenness = nx.edge_betweenness_centrality(G)
+
+    def plot_distribution(values, title):
+
+        plt.figure(figsize=(8,6))
+
+        plt.hist(values, bins=50)
+
+        plt.title(title)
+
+        plt.xlabel("Centrality value")
+        plt.ylabel("Frequency")
+
+        plt.show()
+
+    plot_distribution(degree_centrality.values(), "Degree Centrality Distribution")
+
+    plot_distribution(betweenness_centrality.values(), "Betweenness Centrality Distribution")
+
+    plot_distribution(closeness_centrality.values(), "Closeness Centrality Distribution")
+
+    plot_distribution(pagerank.values(), "PageRank Distribution")
+
+    plot_distribution(edge_betweenness.values(), "Edge Betweenness Distribution")
+
