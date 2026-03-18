@@ -1,0 +1,20 @@
+United States &  1551 \\ 
+\hline
+United Kingdom &  972 \\ 
+\hline
+France &  959 \\ 
+\hline
+Europe &  933 \\ 
+\hline
+World War II &  751 \\ 
+\hline
+England &  751 \\ 
+\hline
+Germany &  743 \\ 
+\hline
+India &  611 \\ 
+\hline
+English language &  598 \\ 
+\hline
+London &  587 \\ 
+\hline

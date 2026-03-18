@@ -1,8 +1,14 @@
+import json
+
 import matplotlib.pyplot as plt
 import networkx as nx
 
+
+output_path = "data/output"
+
 # stopień węzła = liczba jego połączeń
 def degree_statistics(G):
+    print("Calculating degree statistics")
 
     in_degrees = [d for n, d in G.in_degree()]
     out_degrees = [d for n, d in G.out_degree()]
@@ -12,7 +18,8 @@ def degree_statistics(G):
     print("Average out-degree:", sum(out_degrees) / len(out_degrees))
     print("Average degree:", sum(total_degrees) / len(total_degrees))
 
-def degree_distribution(G):
+def degree_distribution(G: nx.Graph):
+    print("Visualizing degree distribution")
 
     degrees = [d for n, d in G.degree()]
 
@@ -26,7 +33,8 @@ def degree_distribution(G):
 
     plt.show()
 
-def log_degree_distribution(G):
+def log_degree_distribution(G : nx.Graph):
+    print("Visualizing degree distribution in logaritmic scale")
 
     degrees = sorted([d for n, d in G.degree()], reverse=True)
 
@@ -40,11 +48,24 @@ def log_degree_distribution(G):
 
     plt.show()
 
-def show_degree_statistics(G):
+def show_degree_statistics(G: nx.Graph):
 
     degree_statistics(G)
     degree_distribution(G)
     log_degree_distribution(G)
+
+def save_degree_statistics(G: nx.Graph, filename: str):
+    degrees = [d for _, d in G.degree()]
+    
+    degree_count = {}
+    for d in degrees:
+        degree_count[d] = degree_count.get(d, 0) + 1
+
+    with open(f"{output_path}/{filename}", "w") as f:
+        for d in sorted(degree_count):
+            f.write(f"{d}, {degree_count[d]}\n")
+            # saving in file in format: degree, count
+
 
 # klasyfikacja typów węzłów
 # Hub - węzły o bardzo dużym stopniu.
@@ -53,7 +74,8 @@ def show_degree_statistics(G):
 # Isolate - węzeł bez połączeń
 # Authority - węzeł do którego prowadzi dużo linków.
 # Broker (Bridge) - węzły które łączą różne części sieci (betweenness centrality)
-def compute_metrics(G):
+def compute_metrics(G : nx.Graph):
+    print("Computing metrics")
     degree = dict(G.degree())
     in_degree = dict(G.in_degree())
 
@@ -63,7 +85,7 @@ def compute_metrics(G):
 
     return degree, in_degree, betweenness, closeness
 
-def find_hubs(degree, top_n=10):
+def find_hubs(degree: dict, top_n=10):
     hubs = sorted(
         degree.items(),
         key=lambda x: x[1],
@@ -72,7 +94,7 @@ def find_hubs(degree, top_n=10):
 
     return hubs
 
-def find_authorities(in_degree, top_n=10):
+def find_authorities(in_degree: dict, top_n=10):
     authorities = sorted(
         in_degree.items(),
         key=lambda x: x[1],
@@ -81,7 +103,7 @@ def find_authorities(in_degree, top_n=10):
 
     return authorities
 
-def find_brokers(betweenness, top_n=10):
+def find_brokers(betweenness: dict, top_n=10):
     brokers = sorted(
         betweenness.items(),
         key=lambda x: x[1],
@@ -99,37 +121,60 @@ def find_connectors(closeness, top_n=10):
 
     return connectors
 
-def find_peripheral(degree):
+def find_peripheral(degree: dict):
     peripheral = [n for n, d in degree.items() if d <= 2]
 
     return peripheral
 
-def find_isolates(degree):
+def find_isolates(degree: dict):
     isolates = [n for n, d in degree.items() if d == 0]
 
     return isolates
 
+
+def save_node_categories(data: list, filename: str):
+
+    with open(f"{output_path}/{filename}", "w") as f:
+        for item in data:
+            f.write(f"{item}\n")
+        
+
 def node_categories(G):
+    print("Computing node categories")
     degree, in_degree, betweenness, closeness = compute_metrics(G)
 
-    print("\nHubs:")
-    print(find_hubs(degree))
+    print("\nFinding Hubs:")
+    hubs = find_hubs(degree)
+    save_node_categories(hubs, "hubs.txt")
+    print(hubs)
 
-    print("\nAuthorities:")
-    print(find_authorities(in_degree))
+    print("\nFincing Authorities:")
+    authorities = find_authorities(in_degree)
+    save_node_categories(authorities, "authorities.txt")
+    print(authorities)
 
-    print("\nBrokers:")
-    print(find_brokers(betweenness))
+    print("\nFinding Brokers:")
+    brokers = find_brokers(betweenness)
+    save_node_categories(brokers, "brokers.txt")
+    print(brokers)
 
-    print("\nConnectors:")
-    print(find_connectors(closeness))
+    print("\n Finding Connectors:")
+    connectors = find_connectors(closeness)
+    save_node_categories(connectors, "connectors.txt")
+    print(connectors)
 
-    print("\nPeripheral nodes:", len(find_peripheral(degree)))
+    print("\n Finding Peripherals:")
+    peripheperal = find_peripheral(degree)
+    save_node_categories(peripheperal, "peripheral.txt")
+    print("\nPeripheral nodes:", len(peripheperal))
 
-    print("\nIsolates:", len(find_isolates(degree)))
+    print("\n Finding isloated:")
+    isolated = find_isolates(degree)
+    save_node_categories(isolated, "isolates.txt")
+    print("\nIsolates:", len(isolated))
 
 # Średnica (diameter) = najdłuższa najkrótsza ścieżka pomiędzy dowolnymi dwoma węzłami
-def compute_diameter(G):
+def compute_diameter(G: nx.Graph):
 
     largest_cc = max(nx.weakly_connected_components(G), key=len)
 
@@ -139,7 +184,7 @@ def compute_diameter(G):
 
     return diameter
 
-def average_path_length(G):
+def average_path_length(G: nx.Graph):
 
     largest_cc = max(nx.weakly_connected_components(G), key=len)
 
@@ -149,7 +194,7 @@ def average_path_length(G):
 
     return avg_path
 
-def network_diameter_print(G):
+def network_diameter_print(G: nx.Graph):
 
     diameter = compute_diameter(G)
     print("\nNetwork diameter:", diameter)
@@ -164,7 +209,7 @@ def network_diameter_print(G):
 # PageRank
 # edge betweenness
 
-def analyze_centralities(G):
+def analyze_centralities(G: nx.Graph):
 
     degree_centrality = nx.degree_centrality(G)
 
