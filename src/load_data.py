@@ -16,6 +16,8 @@ def load_graph(path) -> nx.DiGraph:
 
     links.columns = ["source", "target"]
 
+    links.to_csv("data/links_decoded.csv", sep=",", index=False)
+
     
 
     G = nx.from_pandas_edgelist(
