@@ -2,6 +2,7 @@ from src.load_data import load_graph
 import networkx as nx
 from src.network_analysis import *
 from visualize_graph import draw_graph
+from src.grupowanie.louvain import group_louvain, group_list, save_list_groups, show_group_stats
 
 
 def main():
@@ -9,6 +10,14 @@ def main():
     G = load_graph("data/links.tsv")
 
     print("Graph loaded")
+
+    partition = group_louvain(G.to_undirected())
+    groups = group_list(partition)
+    save_list_groups(groups, "data/output/groups_louvain.txt")
+    show_group_stats(groups)
+
+
+
 
     #viusalization
     #draw_graph(G)
