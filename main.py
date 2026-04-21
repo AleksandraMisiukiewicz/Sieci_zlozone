@@ -3,7 +3,7 @@ import networkx as nx
 from src.network_analysis import *
 from visualize_graph import draw_graph
 from src.grupowanie.louvain import calucalte_klasteryzacja, convert_tolist_values, group_louvain, group_list, save_list_groups, show_group_stats
-
+from src.tradic_closure import tradic_closure, save_tradic_edges
 
 def main():
 
@@ -11,14 +11,17 @@ def main():
 
     print("Graph loaded")
 
-    partition = group_louvain(G.to_undirected())
-    groups = group_list(partition)
-    #klasters = calucalte_klasteryzacja(groups, G)  # Calculate clustering coefficient for each group   
-    #print("Clustering coefficients for groups:", klasters)
+    tradic_edges = tradic_closure(G)
+    save_tradic_edges(tradic_edges, "data/output/tradic_closure_edges.txt")
+
+    # partition = group_louvain(G.to_undirected())
+    # groups = group_list(partition)
+    # #klasters = calucalte_klasteryzacja(groups, G)  # Calculate clustering coefficient for each group   
+    # #print("Clustering coefficients for groups:", klasters)
     
     
-    save_list_groups(groups, "data/output/groups_louvain.txt")
-    show_group_stats(groups, G)
+    # save_list_groups(groups, "data/output/groups_louvain.txt")
+    # show_group_stats(groups, G)
 
 
 
