@@ -2,7 +2,7 @@ from src.load_data import load_graph
 import networkx as nx
 from src.network_analysis import *
 from visualize_graph import draw_graph
-from src.grupowanie.louvain import group_louvain, group_list, save_list_groups, show_group_stats
+from src.grupowanie.louvain import calucalte_klasteryzacja, convert_tolist_values, group_louvain, group_list, save_list_groups, show_group_stats
 
 
 def main():
@@ -13,8 +13,12 @@ def main():
 
     partition = group_louvain(G.to_undirected())
     groups = group_list(partition)
+    #klasters = calucalte_klasteryzacja(groups, G)  # Calculate clustering coefficient for each group   
+    #print("Clustering coefficients for groups:", klasters)
+    
+    
     save_list_groups(groups, "data/output/groups_louvain.txt")
-    show_group_stats(groups)
+    show_group_stats(groups, G)
 
 
 
