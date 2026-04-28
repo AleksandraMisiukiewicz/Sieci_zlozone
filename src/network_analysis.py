@@ -2,6 +2,7 @@ import json
 
 import matplotlib.pyplot as plt
 import networkx as nx
+from networkx.algorithms.community import girvan_newman
 
 
 output_path = "data/output"
@@ -244,3 +245,25 @@ def analyze_centralities(G: nx.Graph):
 
     plot_distribution(edge_betweenness.values(), "Edge Betweenness Distribution")
 
+
+def girvan_newman_communities(G, num_communities=2):
+    """
+    Wykrywa społeczności w grafie G przy użyciu algorytmu Girvana-Newmana.
+
+    Parametry:
+    - G: graf NetworkX
+    - num_communities: docelowa liczba społeczności
+
+    Zwraca:
+    - lista zbiorów węzłów (communities)
+    """
+
+    # Generator kolejnych podziałów
+    comp_gen = girvan_newman(G)
+
+    # Iterujemy aż do uzyskania żądanej liczby społeczności
+    for communities in comp_gen:
+        if len(communities) >= num_communities:
+            return [set(c) for c in communities]
+
+    return []

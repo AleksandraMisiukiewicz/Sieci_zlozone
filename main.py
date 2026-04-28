@@ -3,7 +3,8 @@ import networkx as nx
 from src.network_analysis import *
 from visualize_graph import draw_graph
 from src.grupowanie.louvain import calucalte_klasteryzacja, convert_tolist_values, group_louvain, group_list, save_list_groups, show_group_stats
-
+from src.motifs_analysis import analyze_motifs_directed
+from src.motifs_analysis import visualize_triad_motifs
 
 def main():
 
@@ -11,17 +12,22 @@ def main():
 
     print("Graph loaded")
 
-    partition = group_louvain(G.to_undirected())
-    groups = group_list(partition)
-    #klasters = calucalte_klasteryzacja(groups, G)  # Calculate clustering coefficient for each group   
-    #print("Clustering coefficients for groups:", klasters)
-    
-    
-    save_list_groups(groups, "data/output/groups_louvain.txt")
-    show_group_stats(groups, G)
-
-
-
+    # print("Louvain")
+    # partition = group_louvain(G.to_undirected())
+    # groups = group_list(partition)
+    # #klasters = calucalte_klasteryzacja(groups, G)  # Calculate clustering coefficient for each group
+    # #print("Clustering coefficients for groups:", klasters)
+    #
+    #
+    # save_list_groups(groups, "data/output/groups_louvain.txt")
+    # show_group_stats(groups, G)
+    #
+    #
+    # for i, comm in enumerate(communities):
+    #     print(f"Community {i + 1}: {comm}")
+    #
+    # print("Girvan")
+    # communities = girvan_newman_communities(G, num_communities=3)
 
     #viusalization
     #draw_graph(G)
@@ -53,6 +59,12 @@ def main():
     # node_categories(G)
     # network_diameter_print(G)
     # analyze_centralities(G)
+
+    visualize_triad_motifs()
+    # print("Directed motifs")
+    # analyze_motifs_directed(G)
+
+
 
 
 if __name__ == "__main__":
